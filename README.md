@@ -176,16 +176,22 @@ Add the Following Content:
 ```bash
 #!/bin/bash
 
-# add LD_LIBRARY_PATH
-if [[ ":$LD_LIBRARY_PATH:" != *":~/softwares/lammps/src:"* ]]; then
-    export LD_LIBRARY_PATH=~/softwares/lammps/src:$LD_LIBRARY_PATH
+# remove LD_LIBRARY_PATH
+if [[ ":$LD_LIBRARY_PATH:" == *":/home/user/softwares/lammps/src:"* ]]; then
+    export LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed -e 's|:/home/user/softwares/lammps/src||' -e 's|/home/user/softwares/lammps/src:||')
 fi
 
-# add PYTHONPATH
-NEW_PYTHONPATH=$CONDA_PREFIX/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
-if [[ ":$PYTHONPATH:" != *":$NEW_PYTHONPATH:"* ]]; then
-    export PYTHONPATH=$NEW_PYTHONPATH:$PYTHONPATH
+# remove PYTHONPATH
+if [[ ":$PYTHONPATH:" == *":/home/user/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages:"* ]]; then
+    export PYTHONPATH=$(echo "$PYTHONPATH" | sed -e 's|:/home/user/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages||' -e 's|/home/user/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages:||')
 fi
+
+
+# add PYTHONPATH
+# NEW_PYTHONPATH=$CONDA_PREFIX/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
+# if [[ ":$PYTHONPATH:" != *":$NEW_PYTHONPATH:"* ]]; then
+#     export PYTHONPATH=$NEW_PYTHONPATH:$PYTHONPATH
+# fi
 ```
 ### (d) Create the Deactivation Script:
 Create a file named `env_vars.sh` in the `activate.d` directory:
