@@ -176,22 +176,16 @@ Add the Following Content:
 ```bash
 #!/bin/bash
 
-# remove LD_LIBRARY_PATH
-if [[ ":$LD_LIBRARY_PATH:" == *":/home/user/softwares/lammps/src:"* ]]; then
-    export LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed -e 's|:/home/user/softwares/lammps/src||' -e 's|/home/user/softwares/lammps/src:||')
+# add LD_LIBRARY_PATH
+if [[ ":$LD_LIBRARY_PATH:" != *":~/softwares/lammps/src:"* ]]; then
+    export LD_LIBRARY_PATH=~/softwares/lammps/src:$LD_LIBRARY_PATH
 fi
-
-# remove PYTHONPATH
-if [[ ":$PYTHONPATH:" == *":/home/user/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages:"* ]]; then
-    export PYTHONPATH=$(echo "$PYTHONPATH" | sed -e 's|:/home/user/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages||' -e 's|/home/user/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages:||')
-fi
-
 
 # add PYTHONPATH
-# NEW_PYTHONPATH=$CONDA_PREFIX/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
-# if [[ ":$PYTHONPATH:" != *":$NEW_PYTHONPATH:"* ]]; then
-#     export PYTHONPATH=$NEW_PYTHONPATH:$PYTHONPATH
-# fi
+NEW_PYTHONPATH=$CONDA_PREFIX/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
+if [[ ":$PYTHONPATH:" != *":$NEW_PYTHONPATH:"* ]]; then
+    export PYTHONPATH=$NEW_PYTHONPATH:$PYTHONPATH
+fi
 ```
 ### (d) Create the Deactivation Script:
 Create a file named `env_vars.sh` in the `activate.d` directory:
@@ -203,15 +197,16 @@ Add the Following Content:
 #!/bin/bash
 
 # remove LD_LIBRARY_PATH
-if [[ ":$LD_LIBRARY_PATH:" == *":~/softwares/lammps/src:"* ]]; then
-    export LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed -e 's|:~/softwares/lammps/src||' -e 's|~/softwares/lammps/src:||')
+if [[ ":$LD_LIBRARY_PATH:" == *":/home/yliu3500/softwares/lammps/src:"* ]]; then
+    export LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed -e 's|:/home/yliu3500/softwares/lammps/src||' -e 's|/home/yliu3500/softwares/lammps/src:||')
 fi
 
 # remove PYTHONPATH
-NEW_PYTHONPATH=$CONDA_PREFIX/lib/python$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")/site-packages
-if [[ ":$PYTHONPATH:" == *":$NEW_PYTHONPATH:"* ]]; then
-    export PYTHONPATH=$(echo "$PYTHONPATH" | sed -e "s|:$NEW_PYTHONPATH||" -e "s|$NEW_PYTHONPATH:||")
-fi
+if [[ ":$PYTHONPATH:" == *":/home/yliu3500/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages:"* ]]; then
+    export PYTHONPATH=$(echo "$PYTHONPATH" | sed -e 's|:/home/yliu3500/softwares/miniconda3/envs/lammps/lib/python3.9/site-packages||' -e 's|/home/yliu3>fi
+
+# remove PYTHONPATH
+# unset PYTHONPATH
 ```
 
 ### (e) Ensure Scripts Are Executable
